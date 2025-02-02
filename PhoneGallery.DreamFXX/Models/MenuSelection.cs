@@ -3,13 +3,12 @@
 public class MenuSelection
 {
     public string Name { get; set; }
-    public MenuSelection Menuselection { get; set; }
+    public Action Action { get; set; }
 
-
-    public MenuSelection(string name, MenuSelection menuselection)
+    public MenuSelection(string name, Action action)
     {
         Name = name;
-        Menuselection = menuselection;
+        Action = action;
     }
 }
 
