@@ -1,6 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PhoneGallery.DreamFXX.Data;
-using PhoneGallery.DreamFXX.Models;
+﻿using PhoneGallery.DreamFXX.Data;
 
 namespace PhoneGallery.DreamFXX.Services;
 
@@ -12,7 +10,6 @@ public class PhoneGalleryService
     {
         _context = context;
     }
-
 
 }
 

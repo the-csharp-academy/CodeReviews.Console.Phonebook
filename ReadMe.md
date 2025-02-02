@@ -2,20 +2,26 @@
 
 ## Phonebook Console App
 
-Created by 
+### Steps to properly run this app
+
+1. In root directory, open appsettings.json file
+2. Add your own connection string to your SQL Server 
+    - In case you dont know your connection string, use "localhost" as your server name
+3. Save the appsettings.json file and run
+
+### Created with
 
 - VS 2022 
 - SQL Server
 - Entity Framework Core 
 - Spectre Console
 
-### Main Steps that are already implemented
+### Main functions of this app and their implementation
 
   1. Project initialization
   2. Create filebase and structure for this project
   3. Create Models in Models directory
-  4. Write an DbContext for this application
-     After some research and unsucceessful attempts,
+  4. Create DbContext for this application
      - I found out that Entity Framework Core in console applications is slightly different than ASP.NET Web EF implementation.
      - I was searching, digging and finally found how to create DbContextFactory!
   5. Build working configuration file and services to provide access to database.

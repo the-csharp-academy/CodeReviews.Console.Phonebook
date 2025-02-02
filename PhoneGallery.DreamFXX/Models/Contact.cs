@@ -24,14 +24,4 @@ public class Contact
     [ForeignKey("CategoryId")]
     public int CategoryId { get; set; }
     public Category? Category { get; set; }
-
-    public bool IsValidPhoneNumber()
-    {
-        if (string.IsNullOrEmpty(PhoneNumber))
-            return false;
-
-        string digitsOnly = new(PhoneNumber.Where(char.IsDigit).ToArray());
-        return digitsOnly.Length >= 10 && digitsOnly.Length <= 15;
-    }
 }
-
