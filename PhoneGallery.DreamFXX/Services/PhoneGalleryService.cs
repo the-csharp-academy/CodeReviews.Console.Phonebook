@@ -70,17 +70,61 @@ public class PhoneGalleryService
             CategoryId = categoryId
         };
 
+        try
+        {
+            _context.Contacts.Add(contact);
+            _context.SaveChanges();
 
+            Console.WriteLine("Contact was saved successfully.");
+        }
+        catch (Exception)
+        {
+            throw;
+        }
+    }
+
+    public List<Contact>? GetContacts()
+    {
+        List<Contact> contacts = new();
+        _context.Contacts.ToList();
+        if (contacts.Count == 0)
+        {
+            Console.WriteLine("No saved contacts found. Press any key to go back.");
+            Console.ReadKey();
+            return null;
+        }
+        return contacts;
     }
 
     private List<Category> GetCategories()
     {
-        throw new NotImplementedException();
+        return _context.Categories.ToList();
     }
 
     public void ShowContacts()
     {
+        var contacts = GetContacts();
+        if (contacts == null) return;
+        foreach (var contact in contacts)
+        {
+            Console.WriteLine($"Name - {contact.Name}"); 
+            Console.WriteLine($"Phone Number - {contact.PhoneNumber}");
+            Console.WriteLine($"Email - {contact.Email}");
+            Console.WriteLine($"Category - {contact.Category.Name}\n");
+        }
+    }
 
+    public void ShowCategories()
+    {
+        var categories = GetCategories();
+        if (categories == null) return;
+        
+        foreach (var category in categories)
+        {
+            Console.WriteLine($"{category.Id}: - {category.Name}");
+            Console.WriteLine();
+        }
+        
     }
 
     public void UpdateContact()
@@ -93,14 +137,12 @@ public class PhoneGalleryService
 
     }
 
-    public void ShowCategories()
-    {
-
-    }
 
     public void Exit()
     {
-
+        AnsiConsole.MarkupLine("[red]Goodbye.\n\n- press any key to exit[/]");
+        Console.ReadKey();
+        Environment.Exit(0);
     }
 
 }
