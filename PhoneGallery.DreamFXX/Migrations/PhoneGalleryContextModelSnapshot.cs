@@ -37,6 +37,23 @@ namespace PhoneGallery.DreamFXX.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Categories");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Name = "Parents"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Name = "Girly friends"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Name = "Best friends"
+                        });
                 });
 
             modelBuilder.Entity("PhoneGallery.DreamFXX.Models.Contact", b =>

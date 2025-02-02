@@ -10,14 +10,14 @@ public class PhoneGalleryContext : DbContext
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Category> Categories { get; set; }
 
-    //protected override void OnModelCreating(ModelBuilder modelBuilder)
-    //{
-    //    base.OnModelCreating(modelBuilder);
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
+    {
+        base.OnModelCreating(modelBuilder);
 
-    //    modelBuilder.Entity<Category>().HasData(
-    //        new Category { Id = 1, Name = "Parents" },
-    //        new Category { Id = 2, Name = "Girly friends" },
-    //        new Category { Id = 3, Name = "Best friends" }
-    //    );
-    //}
+        modelBuilder.Entity<Category>().HasData(
+            new Category { Id = 1, Name = "Parents" },
+            new Category { Id = 2, Name = "Girly friends" },
+            new Category { Id = 3, Name = "Best friends" }
+        );
+    }
 }
