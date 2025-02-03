@@ -107,7 +107,7 @@ public class PhoneGalleryService
         if (contacts == null) return;
         foreach (var contact in contacts)
         {
-            Console.WriteLine($"Name - {contact.Name}"); 
+            Console.WriteLine($"Name - {contact.Name}");
             Console.WriteLine($"Phone Number - {contact.PhoneNumber}");
             Console.WriteLine($"Email - {contact.Email}");
             Console.WriteLine($"Category - {contact.Category.Name}\n");
@@ -118,23 +118,55 @@ public class PhoneGalleryService
     {
         var categories = GetCategories();
         if (categories == null) return;
-        
+
         foreach (var category in categories)
         {
-            Console.WriteLine($"{category.Id}: - {category.Name}");
+            Console.WriteLine($"{category.Id}: {category.Name}");
             Console.WriteLine();
         }
-        
+
     }
 
     public void UpdateContact()
     {
+        Contact contact = ContactInput.GetSpecificContact(GetContacts());
+        if (contact == null) 
+            return;
 
+        contact.PhoneNumber = ContactInput.GetPhoneNumberInput();
+        if (contact.PhoneNumber == null) 
+            return;
+
+        contact.Email = ContactInput.GetEmailInput();
+        if (contact.Email == null)
+            return;
+
+        contact.CategoryId = ContactInput.GetCategorySelection(GetCategories());
+        
+        if (!ContactInput.ConfirmAction())
+        {
+            Console.WriteLine("Changes were cancelled.");
+            return;
+        }
+
+        _context.SaveChanges();
+        Console.WriteLine("Contact was updated.");
     }
 
     public void DeleteContact()
     {
+        Contact contact = ContactInput.GetSpecificContact(GetContacts());
+        if (contact == null) 
+            return;
 
+        if (!ContactInput.ConfirmAction())
+        {
+            Console.WriteLine("Contact was not deleted.");
+            return;
+        }
+        _context.Remove(contact);
+        _context.SaveChanges();
+        Console.WriteLine("Contact was deleted.");
     }
 
 
