@@ -18,6 +18,7 @@ This is a simple console-based Phone Book application implemented in C# using En
 - Spectre.Console (for enhanced console UI)
 
 ## Installation and Setup
+
 ### Prerequisites
 Ensure you have the following installed:
 - .NET SDK (latest version recommended)
@@ -32,7 +33,7 @@ cd phonebook-app
 ### Configure the Database
 Modify the connection string in `PhonebookContext.cs` if necessary:
 ```csharp
-optionsBuilder.UseSqlServer("Server=(LocalDb)\\mssqllocaldb;Database=Phonebook;Trusted_Connection=True;");
+optionsBuilder.UseSqlServer("Server=(LocalDb)\mssqllocaldb;Database=Phonebook;Trusted_Connection=True;");
 ```
 Run database migrations:
 ```sh
@@ -47,6 +48,7 @@ dotnet run
 ```
 
 ## Usage
+
 ### Main Menu
 Upon running the application, you will be presented with the main menu:
 ```
@@ -72,3 +74,4 @@ What would you like to do?
 - **Email**: Must follow the format `local@domain.tld`.
 - **Phone Number**: Must follow E.164 format (e.g., `+14151231234`).
 - **Name**: Must contain only letters, spaces, and `/`.
+
