@@ -74,4 +74,3 @@ What would you like to do?
 - **Email**: Must follow the format `local@domain.tld`.
 - **Phone Number**: Must follow E.164 format (e.g., `+14151231234`).
 - **Name**: Must contain only letters, spaces, and `/`.
-
