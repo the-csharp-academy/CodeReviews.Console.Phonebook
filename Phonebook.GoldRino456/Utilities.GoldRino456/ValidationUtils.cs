@@ -8,7 +8,7 @@ public static class ValidationUtils
     {
         try
         {
-            MailAddress mailAddress = new(email);
+            new MailAddress(email);
             return true;
         }
         catch (Exception e)
