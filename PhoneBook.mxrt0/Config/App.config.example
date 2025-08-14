@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<configuration>
+	<connectionStrings>
+		<add name="DefaultConnectionString" connectionString="Server=localhost;Database=ContactsDB;Trusted_Connection=True;TrustServerCertificate=True"
+			 providerName="System.Data.SqlClient"/>
+	</connectionStrings>
+</configuration>
