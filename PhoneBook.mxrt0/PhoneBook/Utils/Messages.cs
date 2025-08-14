@@ -18,11 +18,11 @@ namespace PhoneBook.Utils
 
         public static readonly string InvalidContactNameMessage = "\nInvalid name. Please enter a non-empty string containing at least 1 letter!\n";
 
-        public static readonly string ContactEmailMessage = "\nEnter the e-mail of the contact:\n";
+        public static readonly string ContactEmailMessage = "\nEnter the e-mail of the contact: (Format: {local}@{domain}.{TLD} -> test@example.com)\n";
 
         public static readonly string InvalidContactEmailMessage = "\nInvalid e-mail. Left part must have at least 1 letter, there should a domain section (e.g. xyz.com) and an @ separating the two parts!\n";
 
-        public static readonly string ContactPhoneMessage = "\nEnter the phone number of the contact (max length 20):\n";
+        public static readonly string ContactPhoneMessage = "\nEnter the phone number of the contact (max length 20 characters, optional leading '+', digits only, optional dashes '-' between digits):\n";
 
         public static readonly string ContactCategoryMesage = "\nEnter the category the contact will belong to (it must already exist):\n";
 
