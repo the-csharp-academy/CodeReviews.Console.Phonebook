@@ -11,6 +11,7 @@ internal class Enums
 
     internal enum ContactAction
     {
+        AddContact,
         ViewContact,
         EditContact,
         DeleteContact,

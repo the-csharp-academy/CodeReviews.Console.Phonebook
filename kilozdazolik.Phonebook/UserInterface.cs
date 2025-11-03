@@ -40,7 +40,7 @@ public class UserInterface
             var option = AnsiConsole.Prompt(
                 new SelectionPrompt<Enums.ContactAction>()
                     .Title("Contacts Menu")
-                    .AddChoices(Enums.ContactAction.ViewContact, Enums.ContactAction.EditContact,
+                    .AddChoices(Enums.ContactAction.ViewContact, Enums.ContactAction.AddContact, Enums.ContactAction.EditContact,
                         Enums.ContactAction.DeleteContact, Enums.ContactAction.Goback)
             );
 
@@ -48,6 +48,15 @@ public class UserInterface
             {
                 case Enums.ContactAction.ViewContact:
                      ContactService.GetContacts();
+                    break;
+                case Enums.ContactAction.AddContact:
+                    ContactService.AddContact();
+                    break;
+                case Enums.ContactAction.DeleteContact:
+                    ContactService.DeleteContact();
+                    break;
+                case Enums.ContactAction.EditContact:
+                    ContactService.EditContact();
                     break;
                 case Enums.ContactAction.Goback:
                     isAppRunning = false;
@@ -59,12 +68,11 @@ public class UserInterface
     public static void ShowContactsTable(List<Contact> contacts)
     {
         var table = new Table();
-        table.AddColumn("Id");
         table.AddColumn("Name");
 
         foreach (var contact in contacts)
         {
-            table.AddRow(contact.ContactId.ToString(), contact.Name);
+            table.AddRow(contact.Name);
         }
         
         AnsiConsole.Write(table);
