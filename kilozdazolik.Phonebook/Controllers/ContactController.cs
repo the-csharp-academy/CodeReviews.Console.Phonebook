@@ -73,4 +73,20 @@ public class ContactController
             throw new Exception("Unexpected error happened: ", ex);
         }
     }
+
+    internal static List<Contact> GetContactsByCategory(Category category)
+    {
+        try
+        {
+            using var db = new PhoneBookContext();
+            var contacts = db.Contacts
+                .Where(c => c.CategoryId == category.CategoryId)
+                .ToList();
+            return contacts;
+        }
+        catch (SqlException ex)
+        {
+            throw new Exception("Failed to retrieve contacts by category", ex);
+        }
+    }
 }

@@ -12,9 +12,19 @@ internal class Enums
     internal enum ContactAction
     {
         AddContact,
-        ViewContact,
+        ViewAllContacts,
+        ViewContactsByCategory,
         EditContact,
         DeleteContact,
+        Goback
+    }
+
+    internal enum CategoryAction
+    {
+        AddCategory,
+        ViewCategories,
+        EditCategory,
+        DeleteCategory,
         Goback
     }
 }

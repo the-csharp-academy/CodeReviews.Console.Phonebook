@@ -9,7 +9,7 @@ public class ContactService
     internal static void GetContacts()
     {
         var contacts = ContactController.GetContacts();
-        UserInterface.ShowContactsTable(contacts);
+        UserInterface.ShowTable(contacts);
     }
 
     internal static void AddContact()
@@ -69,8 +69,15 @@ public class ContactService
                     break;
             }
         }
-        
+
         ContactController.UpdateContact(contact);
+    }
+    
+    internal static void GetContactsByCategory()
+    {
+        var category = CategoryService.GetCategoryOptionInput();
+        var contacts = ContactController.GetContactsByCategory(category);
+        UserInterface.ShowTable(contacts);
     }
 
     internal static Contact GetContactOptionInput()
