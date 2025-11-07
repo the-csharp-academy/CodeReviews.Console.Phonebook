@@ -11,7 +11,7 @@ public class ContactController
         try
         {
             using var db = new PhoneBookContext();
-            var contacts = db.Contacts.ToList();
+            var contacts = db.Contacts.Include(c => c.Category) .ToList();
             return contacts;
         }
         catch (SqlException ex)
@@ -80,6 +80,7 @@ public class ContactController
         {
             using var db = new PhoneBookContext();
             var contacts = db.Contacts
+                .Include(c => c.Category) 
                 .Where(c => c.CategoryId == category.CategoryId)
                 .ToList();
             return contacts;

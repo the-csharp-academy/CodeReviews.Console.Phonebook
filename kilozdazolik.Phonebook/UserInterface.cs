@@ -35,6 +35,7 @@ public class UserInterface
 
     private static void ContactsMenu()
     {
+        AnsiConsole.Clear();
         var isAppRunning = true;
         while (isAppRunning)
         {
@@ -71,6 +72,7 @@ public class UserInterface
 
     static internal void CategoriesMenu()
     {
+        AnsiConsole.Clear();
         var isMenuRunning = true;
         while (isMenuRunning)
         {
@@ -124,6 +126,38 @@ public class UserInterface
 
         AnsiConsole.WriteLine("Press any key to continue...");
         Console.ReadLine();
+        AnsiConsole.Clear();
+    }
+
+    public static void ShowContactOptions(Contact contact)
+    {
+        var table = new Table();
+        table.AddColumn("Property");
+        table.AddColumn("Value");
+        
+        table.AddRow("Name", contact.Name);
+        table.AddRow("Email", contact.Email ?? "N/A");
+        table.AddRow("Phone", contact.PhoneNumber ?? "N/A");
+        table.AddRow("Category", contact.Category?.Name ?? "No Category");
+        
+        AnsiConsole.Write(table);
+        
+        var option = AnsiConsole.Prompt(
+            new SelectionPrompt<Enums.ContactOption>()
+                .Title("What would yo like to do?")
+                .AddChoices(Enums.ContactOption.SendEmail, Enums.ContactOption.SendSms, Enums.ContactOption.Goback)
+        );
+
+        switch (option)
+        {
+            case Enums.ContactOption.SendEmail:
+                break;
+            case Enums.ContactOption.SendSms:
+                break;
+            case Enums.ContactOption.Goback:
+                break;
+        }
+        
         AnsiConsole.Clear();
     }
 }

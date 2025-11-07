@@ -19,6 +19,13 @@ internal class Enums
         Goback
     }
 
+    internal enum ContactOption
+    {
+        SendEmail,
+        SendSms,
+        Goback
+    }
+
     internal enum CategoryAction
     {
         AddCategory,

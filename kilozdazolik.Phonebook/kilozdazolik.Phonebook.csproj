@@ -5,7 +5,8 @@
         <TargetFramework>net9.0</TargetFramework>
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
-    </PropertyGroup>
+      <UserSecretsId>18580d62-a8c2-4292-a5b5-2e4b949e98c3</UserSecretsId>
+  </PropertyGroup>
 
     <ItemGroup>
       <PackageReference Include="libphonenumber-csharp" Version="9.0.17" />

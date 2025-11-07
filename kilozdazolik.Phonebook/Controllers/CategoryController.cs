@@ -1,6 +1,7 @@
 using kilozdazolik.Phonebook.Models;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Spectre.Console;
 
 namespace kilozdazolik.Phonebook.Controllers;
 
@@ -12,12 +13,19 @@ public class CategoryController
         db.Add(category);
         db.SaveChanges();
     }
-
+      
     internal static void DeleteCategory(Category category)
     {
         using var db = new PhoneBookContext();
-        db.Remove(category);
-        db.SaveChanges();
+        if (category.CategoryId == 1)
+        {
+            AnsiConsole.MarkupLine("[red]You can't delete this category![/]");
+        }
+        else
+        {
+            db.Remove(category);
+            db.SaveChanges();
+        }
     }
 
     internal static List<Category> GetCategories()
@@ -31,7 +39,14 @@ public class CategoryController
     internal static void UpdateCategory(Category category)
     { 
         using var db = new PhoneBookContext();
-        db.Update(category);
-        db.SaveChanges();
+        if (category.CategoryId == 1)
+        {
+            AnsiConsole.MarkupLine("[red]You can't update this category![/]");
+        }
+        else
+        {
+            db.Update(category);
+            db.SaveChanges();
+        }
     }
 }

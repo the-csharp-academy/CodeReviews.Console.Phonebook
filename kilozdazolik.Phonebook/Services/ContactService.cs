@@ -8,8 +8,8 @@ public class ContactService
 {
     internal static void GetContacts()
     {
-        var contacts = ContactController.GetContacts();
-        UserInterface.ShowTable(contacts);
+        var contact = GetContactOptionInput();
+        UserInterface.ShowContactOptions(contact);
     }
 
     internal static void AddContact()
