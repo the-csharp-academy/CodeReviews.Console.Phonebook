@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+﻿using kilozdazolik.Phonebook.Controllers;
 using kilozdazolik.Phonebook.Models;
 using kilozdazolik.Phonebook.Services;
 using Spectre.Console;
@@ -151,6 +151,7 @@ public class UserInterface
         switch (option)
         {
             case Enums.ContactOption.SendEmail:
+                EmailController.SendEmail(contact);
                 break;
             case Enums.ContactOption.SendSms:
                 break;

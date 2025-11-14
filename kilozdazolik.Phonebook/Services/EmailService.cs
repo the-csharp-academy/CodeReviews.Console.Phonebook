@@ -1,6 +1,7 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using Microsoft.Extensions.Configuration;
+using Spectre.Console;
 
 namespace kilozdazolik.Phonebook.Services;
 
@@ -21,15 +22,52 @@ public class EmailService
         _senderPassword = emailSettings["SenderPassword"];
         _enableSsl = bool.Parse(emailSettings["EnableSsl"]);
     }
-
+    
     public void SendEmail(string to, string subject, string body)
     {
-        using var client = new SmtpClient(_smtpServer, _port)
+        try
         {
-            Credentials = new NetworkCredential(_senderEmail, _senderPassword),
-            EnableSsl = _enableSsl
-        };
+            var mailMessage = new MailMessage
+            {
+                From = new MailAddress(_senderEmail),
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = false
+            };
+            
+            mailMessage.To.Add(to);
 
-        client.Send(_senderEmail, to, subject, body);
+            using var smtpClient = new SmtpClient(_smtpServer)
+            {
+                Port = _port,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(_senderEmail, _senderPassword),
+                EnableSsl = _enableSsl,
+                DeliveryMethod = SmtpDeliveryMethod.Network
+            };
+
+            AnsiConsole.MarkupLine("[yellow]Sending email...[/]");
+            smtpClient.Send(mailMessage);
+            AnsiConsole.MarkupLine("[green]Email sent successfully![/]");
+        }
+        catch (Exception ex)
+        {
+            AnsiConsole.MarkupLine($"[red]Error details: {ex.Message}[/]");
+            throw new Exception("Error sending email: ", ex);
+        }
+    }
+
+    public string GetSubjectInput()
+    {
+        var subject = AnsiConsole.Prompt(
+            new TextPrompt<string>("What's the subject?"));
+        return subject;
+    }
+    
+    public string GetBodyInput()
+    {
+        var body = AnsiConsole.Prompt(
+            new TextPrompt<string>("What's the message?"));
+        return body;
     }
 }

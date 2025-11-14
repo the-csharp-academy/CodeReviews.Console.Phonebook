@@ -15,12 +15,32 @@ public class ContactService
     internal static void AddContact()
     {
         var contact = new Contact();
-        
+    
         contact.Name = Helper.GetNameInput();
         contact.Email = Helper.GetEmailInput();
         contact.PhoneNumber = Helper.GetPhoneNumberInput();
         
+        var categories = CategoryController.GetCategories();
+    
+        if (categories.Count == 0)
+        {
+            AnsiConsole.MarkupLine("[yellow]No categories available. Please create a category first.[/]");
+            AnsiConsole.WriteLine("Press any key to continue...");
+            Console.ReadLine();
+            return;
+        }
+    
+        var selectedCategory = AnsiConsole.Prompt(
+            new SelectionPrompt<Category>()
+                .Title("Select a category:")
+                .AddChoices(categories)
+                .UseConverter(c => c.Name));
+    
+        contact.CategoryId = selectedCategory.CategoryId;
+    
         ContactController.InsertContact(contact);
+    
+        AnsiConsole.MarkupLine("[green]Contact added successfully![/]");
     }
 
     internal static void DeleteContact()
