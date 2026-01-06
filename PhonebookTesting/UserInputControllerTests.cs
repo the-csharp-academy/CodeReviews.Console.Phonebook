@@ -5,11 +5,6 @@ namespace PhonebookTesting;
 
 public class USerInputControllerTests
 {
-    /*        [SetUp]
-        public void Setup()
-        {
-        }
-    */
     private static readonly object[] IntegerTestCases =
     {
         new TestCaseData("123", true),
