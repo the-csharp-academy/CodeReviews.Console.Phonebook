@@ -34,12 +34,20 @@ internal class UserInterface
                 break;
             case "View Categories":
                 var ContactFromCategory = PhonebookController.ChooseContactFromCategory();
+                if (ContactFromCategory == null)
+                {
+                    AnsiConsole.MarkupLine("[red]No contacts in said category, returning to Main Menu[/]");
+                    Console.ReadKey();
+                    MainMenu();
+                }
                 AnsiConsole.MarkupLine($"[yellow][aqua]{ContactFromCategory.ContactName}[/] - Phone Number: [aqua]{ContactFromCategory.PhoneNumber}[/], Email: [aqua]{ContactFromCategory.Email}[/], Category: [aqua]{ContactFromCategory.CategoryName}[/][/]");
                 Console.ReadKey();
                 MainMenu();
                 break;
             case "Send Email":
                 PhonebookController.SendEmail();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Exit":
                 Environment.Exit(0);
@@ -60,9 +68,13 @@ internal class UserInterface
         {
             case "Add Contact":
                 PhonebookController.AddContact();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Add Category":
                 PhonebookController.AddCategory();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Cancel":
                 MainMenu();
@@ -82,9 +94,13 @@ internal class UserInterface
         {
             case "Delete Contact":
                 PhonebookController.DeleteContact();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Delete Category":
                 PhonebookController.DeleteCategory();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Cancel":
                 MainMenu();
@@ -106,15 +122,23 @@ internal class UserInterface
             case "Update Contact Name":
                 
                 PhonebookController.UpdateContactName();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Update Contact Email":
                 PhonebookController.UpdateContactEmail();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Update Phone Number":
                 PhonebookController.UpdateContactPhoneNumber();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Update Category":
                 PhonebookController.UpdateContactCategory();
+                Console.ReadKey();
+                MainMenu();
                 break;
             case "Cancel":
                 MainMenu();

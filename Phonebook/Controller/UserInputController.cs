@@ -1,10 +1,9 @@
-﻿using Microsoft.EntityFrameworkCore.Metadata.Conventions;
-using Spectre.Console;
+﻿using Spectre.Console;
 using System.ComponentModel.DataAnnotations;
 
 namespace Phonebook.Controller;
 
-internal class UserInputController
+public class UserInputController
 {
     internal static string GetPhoneNumber()
     {
@@ -13,12 +12,12 @@ internal class UserInputController
         {
             phoneNum = AnsiConsole.Prompt(
                 new TextPrompt<string>("Please write the new Phone Number"));
-        } while (IsValidPhoneNumber(phoneNum));
+        } while (IsInvalidPhoneNumber(phoneNum));
         var StringPhoneNum = phoneNum.ToString();
         return StringPhoneNum;
     }
 
-    private static bool IsValidPhoneNumber(string PhoneNum)
+    public static bool IsInvalidPhoneNumber(string PhoneNum)
     {
         if (PhoneNum.Length < 7)
         {
@@ -55,13 +54,13 @@ internal class UserInputController
         {
             ContactEmail = AnsiConsole.Prompt(
                 new TextPrompt<string>("Please write the new Contact Email"));
-        } while (IsValidEmailAddress(ContactEmail));
+        } while (IsInvalidEmailAddress(ContactEmail));
 
         return ContactEmail;
     }
     /*This only checks if there is @ in the email address, according to Microsoft Docs the only real way to check this is to send an email
     But it would make no sense to spam everyone you add to your contact list just to check if their email is real*/
-    private static bool IsValidEmailAddress(string address) 
+    public static bool IsInvalidEmailAddress(string address)
     {
         if (address != null && new EmailAddressAttribute().IsValid(address)) return false;
         AnsiConsole.MarkupLine("[red] Invalid Email Format, please try again[/]");

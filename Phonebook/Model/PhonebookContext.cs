@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System.Configuration;
 
 namespace Phonebook.Model;
@@ -7,7 +8,7 @@ internal class PhonebookContext : DbContext
 {
     public DbSet<Contact> Contacts { get; set; }
     public DbSet<Category> Categories { get; set; }
-    internal string ConnectionString = ConfigurationManager.AppSettings["connectionString"];
+    public string ConnectionString = new ConfigurationBuilder().AddJsonFile("appsettings.json").Build().GetSection("SQLConnectionString")["connectionString"];
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         List<Category> categories = new List<Category>
