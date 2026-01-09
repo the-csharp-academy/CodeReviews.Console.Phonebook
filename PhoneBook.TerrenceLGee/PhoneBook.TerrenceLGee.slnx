@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="Phonebook.TerrenceLGee.Tests/Phonebook.TerrenceLGee.Tests.csproj" Id="80fc38f3-7243-4e87-b28a-27fd436212cf" />
+  <Project Path="PhoneBook.TerrenceLGee/PhoneBook.TerrenceLGee.csproj" />
+</Solution>
