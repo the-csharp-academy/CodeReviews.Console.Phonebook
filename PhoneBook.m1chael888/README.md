@@ -20,3 +20,6 @@ Upon starting the app you will be greeted by a main menu and a message prompting
 - Choosing "Exit" will close the app
 
 - The app will continue to loop back to the main menu after an operation finishes until you close the program
+
+# Impressions
+After using less abstracted ORMs for data access for a while, using EF Core for the first time in a while was quite a change. After familiarising myself with design-time and migrations again being able to use LINQ for db queries was appreciated. Simple CRUD apps have become intuitive to make at this point, and learning something new by making one that implements what you would like to learn feels like a solid approach
