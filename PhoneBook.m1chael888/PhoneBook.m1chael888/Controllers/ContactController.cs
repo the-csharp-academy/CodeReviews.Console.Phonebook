@@ -141,6 +141,6 @@ public class ContactController
 
     private bool ValidPhoneNumber(string input)
     {
-        return ((input.Length == 10 && int.TryParse(input, out int x) || input.Length < 1));
+        return ((input.Length == 10 && long.TryParse(input, out long y) || input.Length < 1));
     }
 }
