@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="PhoneBook.UnitTests/PhoneBook.UnitTests.csproj" Id="4c5b346e-e1e3-43e9-98b8-0619ffd233db" />
+  <Project Path="PhoneBook/PhoneBook.csproj" />
+</Solution>
