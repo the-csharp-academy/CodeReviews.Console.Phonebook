@@ -11,8 +11,8 @@ namespace PhoneBook;
 internal class UserService
 {
     private static UserController userController = new UserController();
-    private static string? gmailAddress = null;
-    private static string? gmailKey = null;
+    private static string? gmailAddress;
+    private static string? gmailKey;
     internal static void AddUser()
     {
         var name = Validator.GetStringInput("Enter your name: ");
