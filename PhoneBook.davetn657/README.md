@@ -21,7 +21,26 @@ Created for the C# Academy project based learning
 
 ## Setup
 
+Setup working directory:
 
+- Click the arrow dropdown beside the run button on Visual Studio
+
+![Click the dropdown arrow on the run button](./READMEImgs/SetupStep1.png)
+
+- Click "PhoneBook.davetn657 Debug Properties"
+
+![Click PhoneBook.davetn657 Debug Properties](./READMEImgs/SetupStep2.png)
+
+- Click Browse and change the working directory to your PhoneBook.davetn657 file path
+
+![Click Browse and change the working directory](./READMEImgs/SetupStep3.png)
+
+Sending an Email:
+
+- Choose a contacct that you would like to email
+- Choose the "Send Email" Option
+- Enter the email and password of the email you would like to use to send an email with (Currently only works with gmail)
+- Enter email content then send!
 
 ## Technologies
 
