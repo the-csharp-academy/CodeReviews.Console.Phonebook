@@ -1,13 +1,8 @@
 ﻿using System.ComponentModel;
-using System.Reflection;
 
 namespace PhoneBook.davetn657.Controllers;
 public class OptionUtils
 {
-    public OptionUtils()
-    {
-
-    }
 
     public string GetStringValue(Enum value)
     {

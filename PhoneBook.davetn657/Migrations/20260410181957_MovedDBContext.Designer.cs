@@ -3,15 +3,15 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PhoneBook.davetn657.Model;
+using PhoneBook.davetn657.Data;
 
 #nullable disable
 
 namespace PhoneBook.davetn657.Migrations
 {
     [DbContext(typeof(PhoneBookContext))]
-    [Migration("20260307063307_LocalDb")]
-    partial class LocalDb
+    [Migration("20260410181957_MovedDBContext")]
+    partial class MovedDBContext
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -19,11 +19,15 @@ namespace PhoneBook.davetn657.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("PhoneBook.davetn657.Model.PhoneProperties", b =>
+            modelBuilder.Entity("PhoneBook.davetn657.Data.PhoneProperties", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
+
+                    b.Property<string>("Category")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
 
                     b.Property<string>("Email")
                         .IsRequired()

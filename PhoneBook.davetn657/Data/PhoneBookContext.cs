@@ -1,7 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System.ComponentModel.DataAnnotations;
-namespace PhoneBook.davetn657.Model;
+
+namespace PhoneBook.davetn657.Data;
 
 public class PhoneBookContext : DbContext
 {

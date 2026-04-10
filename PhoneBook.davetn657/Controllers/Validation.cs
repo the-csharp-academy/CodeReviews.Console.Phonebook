@@ -4,10 +4,6 @@ using System.Text.RegularExpressions;
 namespace PhoneBook.davetn657.Controllers;
 public class Validation
 {
-    public Validation()
-    {
-
-    }
 
     public bool ValidatePhoneNumber(string number)
     {

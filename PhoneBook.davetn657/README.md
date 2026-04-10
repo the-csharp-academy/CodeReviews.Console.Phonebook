@@ -19,6 +19,10 @@ Created for the C# Academy project based learning
 - Can send emails
 - Create a units test project
 
+## Setup
+
+
+
 ## Technologies
 
 - C#

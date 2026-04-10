@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using PhoneBook.davetn657.Model;
+using PhoneBook.davetn657.Data;
 
 #nullable disable
 
@@ -16,7 +16,7 @@ namespace PhoneBook.davetn657.Migrations
 #pragma warning disable 612, 618
             modelBuilder.HasAnnotation("ProductVersion", "8.0.8");
 
-            modelBuilder.Entity("PhoneBook.davetn657.Model.PhoneProperties", b =>
+            modelBuilder.Entity("PhoneBook.davetn657.Data.PhoneProperties", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()

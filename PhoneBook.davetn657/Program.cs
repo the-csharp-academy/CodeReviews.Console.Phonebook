@@ -1,5 +1,5 @@
 ﻿using PhoneBook.davetn657.Controllers;
-using PhoneBook.davetn657.Model;
+using PhoneBook.davetn657.Data;
 using PhoneBook.davetn657.Views;
 
 namespace PhoneBook.davetn657

@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PhoneBook.davetn657.Controllers;
-using PhoneBook.davetn657.Model;
+using PhoneBook.davetn657.Data;
 using Spectre.Console;
 using System.Net;
 using System.Net.Mail;
