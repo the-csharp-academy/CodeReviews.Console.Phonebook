@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "Phonebook.EntityFramework": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\jramo\\source\\repos\\CodeReviews.Console.Phonebook\\Phonebook.EntityFramework\\"
+    }
+  }
+}
