@@ -67,8 +67,16 @@ public class UserInput
 
     private bool IsValidPhoneNr(string number)
     {
-        var phoneUtil = PhoneNumberUtil.GetInstance();
-        var phoneNumber = phoneUtil.Parse(number, null);
-        return phoneUtil.IsValidNumber(phoneNumber);
+        try
+        {
+            var phoneUtil = PhoneNumberUtil.GetInstance();
+            var phoneNumber = phoneUtil.Parse(number, null);
+            return phoneUtil.IsValidNumber(phoneNumber);
+        }
+        catch (NumberParseException)
+        {
+            return false;
+        }
+        
     }
 }

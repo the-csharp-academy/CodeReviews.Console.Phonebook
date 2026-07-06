@@ -51,6 +51,12 @@ namespace silvermax.PhoneBook.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Name")
+                        .IsUnique();
+
+                    b.HasIndex("PhoneNumber")
+                        .IsUnique();
+
                     b.ToTable("Contacts");
                 });
 #pragma warning restore 612, 618

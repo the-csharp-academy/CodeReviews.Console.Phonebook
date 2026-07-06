@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using Microsoft.Identity.Client;
 
 namespace silvermax.PhoneBook.DbAcess;
 
@@ -18,6 +17,8 @@ public class ContactDbContext : DbContext
         {
             entity.HasKey(e => e.Id);
             entity.Property(e => e.Id).HasDefaultValueSql("NEWSEQUENTIALID()");
+            entity.HasIndex(e => e.Name).IsUnique();
+            entity.HasIndex(e => e.PhoneNumber).IsUnique();
             entity.Property(e => e.Name).IsRequired()
                 .HasMaxLength(200);
             entity.Property(e => e.Email).HasMaxLength(200);

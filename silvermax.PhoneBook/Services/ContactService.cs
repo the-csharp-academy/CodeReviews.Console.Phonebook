@@ -1,5 +1,4 @@
-﻿using Azure;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 using silvermax.PhoneBook.DbAcess;
 using silvermax.PhoneBook.Dtos;
 using Spectre.Console;
@@ -13,7 +12,10 @@ public class ContactService(ContactDbContext dbContext, UserInput userInput, Can
         var response = userInput.GetInfo();
 
         if (await dbContext.Contacts.AnyAsync(c => c.PhoneNumber == response.PhoneNumber, ct))
+        {
             AnsiConsole.MarkupLine("[red]This phone number already exists[/]");
+            return;
+        }
 
         var contact = new Contact
         {
@@ -25,7 +27,15 @@ public class ContactService(ContactDbContext dbContext, UserInput userInput, Can
         };
 
         dbContext.Add(contact);
-        await dbContext.SaveChangesAsync(ct);
+        try
+        {
+            await dbContext.SaveChangesAsync(ct);
+        }
+        catch (DbUpdateException)
+        {
+            AnsiConsole.MarkupLine("[red]Failed to add phone number: Phone number already exists[/]");
+            return;
+        }
 
         Console.Clear();
 
@@ -49,6 +59,13 @@ public class ContactService(ContactDbContext dbContext, UserInput userInput, Can
         await DisplayContacts();
 
         var contactToDelete = AnsiConsole.Ask<string>("[DarkOrange3_1]Please write the first name of the contact you want to delete:[/]");
+
+        if (string.IsNullOrWhiteSpace(contactToDelete))
+        {
+            AnsiConsole.MarkupLine("[red]Invalid name[/]");
+            UIHelper.ContinueMessage();
+            return;
+        }
 
         bool confirmation = AnsiConsole.Confirm("[red]Are you sure you want to delete contact {contactToDelete}?[/]");
 
@@ -84,7 +101,14 @@ public class ContactService(ContactDbContext dbContext, UserInput userInput, Can
     {
         await DisplayContacts();
 
-        var contactToEdit = AnsiConsole.Ask<string>("[DarkOrange3_1]Please choose the name of the contact you want to update:[/]");
+        var contactToEdit = AnsiConsole.Ask<string>("[DarkOrange3_1]Please write the name of the contact you want to update:[/]");
+
+        if (string.IsNullOrWhiteSpace(contactToEdit))
+        {
+            AnsiConsole.MarkupLine("[red]Invalid name[/]");
+            UIHelper.ContinueMessage();
+            return;
+        }
 
         var parts = contactToEdit.Trim().Split(" ", StringSplitOptions.RemoveEmptyEntries) ?? Array.Empty<string>();
 

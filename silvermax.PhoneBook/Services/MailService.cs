@@ -1,5 +1,4 @@
-﻿using MailKit;
-using MailKit.Security;
+﻿using MailKit.Security;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using MimeKit;
