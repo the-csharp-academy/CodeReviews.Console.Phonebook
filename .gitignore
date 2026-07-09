@@ -4,6 +4,9 @@
 ##
 ## Get latest from https://github.com/github/gitignore/blob/main/VisualStudio.gitignore
 
+#Configuration
+appsettings.json
+
 #Environment Variables
 *.env
 

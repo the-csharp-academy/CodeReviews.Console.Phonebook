@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="PhoneBook.UnitTest/PhoneBook.UnitTest.csproj" />
+  <Project Path="PhoneBook/PhoneBook.csproj" />
+</Solution>
