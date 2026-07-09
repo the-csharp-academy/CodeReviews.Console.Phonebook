@@ -45,9 +45,9 @@ internal class EmailService
         }
 
 
-        string email = GetContactEmailOptionInput();
+        Contact contact = GetContactOptionInput();
 
-        if (email == null) 
+        if (contact == null) 
         {
             AnsiConsole.MarkupLine("[red]There are no contacts available.[/]");
 
@@ -57,21 +57,25 @@ internal class EmailService
             return;
         };
 
+        string body = File.ReadAllText(
+            Path.Combine(AppContext.BaseDirectory, "Templates", "SendEmailTemplate.html"));
+
         string subject = AnsiConsole.Ask<string>("Subject:");
 
         string message = AnsiConsole.Ask<string>("Message:");
 
-        emailController.SendEmail(subject,email,message);
+        body = body.Replace("{{Name}}", contact.Name)
+           .Replace("{{Message}}", message);
+
+        emailController.SendEmail(subject,contact.Email,body);
 
         AnsiConsole.MarkupLine("[green]Email sent successfully.[/]");
-
-        AnsiConsole.MarkupLine("[red]There are no contacts available.[/]");
 
         Console.WriteLine("Enter any key to continue...");
         Console.ReadLine();
     }
 
-    private static string GetContactEmailOptionInput()
+    private static Contact GetContactOptionInput()
     {
         var contacts = ContactController.GetAllContacts();
 
@@ -87,6 +91,9 @@ internal class EmailService
             .UseConverter(c => $"{c.Name}: [#A57982]{c.Email}[/]")
             .AddChoices(contacts));
 
-        return options.Email;
+        int id = contacts.Single(c => c.ContactId == options.ContactId).ContactId;
+        Contact contact = ContactController.GetContactById(id);
+
+        return contact;
     }
 }
