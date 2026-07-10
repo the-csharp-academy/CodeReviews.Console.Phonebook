@@ -1,84 +1,97 @@
-# PhoneBook Educational Tutorial Design
+# PhoneBook EF Core Construction Tutorial Design
 
 ## Goal
 
-Replace the short, reference-style `PhoneBook/phonebook_tutorial.md` with a thorough, **EF Core-centered** learning guide for readers who know basic C# but need help reading a real .NET console application. The guide must explain the running flow, every authored and generated project file, and the reason each part exists—not merely list filenames or features.
+Rewrite `PhoneBook/phonebook_tutorial.md` as an EF Core-centered construction guide. It must lead a reader with basic C# from **Step 0** through the final application, explaining which file is introduced or changed at each step, why that dependency comes next, and how it contributes to the next EF Core capability.
 
-EF Core is the tutorial's main subject. The console UI, validation, configuration, email, and SMS code exist chiefly to show where real application code creates, queries, changes, and persists EF Core entities.
+This is a **logical dependency order**, not a claim about the repository's historical commit order. The current repository state cannot reliably prove when every source file was first created.
 
 ## Audience and teaching style
 
-- Assume the reader can follow basic classes, methods, variables, and `if` statements.
-- Explain less familiar C# and .NET terms at first use in short **C# note** callouts: `partial`, `sealed`, `record`, nullable `?`, attributes, `Func<T>`, lambda expressions, LINQ, and `using var`.
-- Build an EF Core vocabulary progressively: ORM, entity, model, `DbContext`, `DbSet`, connection string, query, LINQ translation, `Include`, `AsNoTracking`, change tracking, `SaveChanges`, migration, model snapshot, seed data, foreign key, and navigation property. Define a term before relying on it.
-- Teach the finished application's behavior. Do not turn this into a long build-from-scratch course or reproduce large source files.
-- Use concrete method paths and small excerpts only when they clarify a decision. Each explanation must answer **what it does**, **why it exists**, **how it participates in the flow**, and **which files it connects to**.
-- Distinguish current behavior from limitations or implementation quirks. Do not present a limitation as a feature.
+- Assume basic C#: classes, methods, variables, and `if` statements.
+- Explain unfamiliar C# syntax at first use: `partial`, `sealed`, `record`, nullable `?`, attributes, `Func<T>`, lambda expressions, LINQ, and `using var`.
+- Make EF Core the main thread. Define ORM, entity, model, `DbContext`, `DbSet`, connection string, query, `Include`, `AsNoTracking`, change tracking, `SaveChanges`, migration, model snapshot, seed data, foreign key, and navigation property before using them as shorthand.
+- Every numbered step contains: **Goal**, **Files introduced or changed**, **Why now**, **What to add or understand**, **EF Core lesson**, **Connection to the next step**, and a short verification checkpoint.
+- Use the final checked-in files as cumulative snapshots. A step may point to a class or method that now contains later features, but must identify the subsection relevant to that step rather than pretending the final file existed unchanged at the time.
+- Keep non-EF subjects proportionate. UI, configuration, SMTP, and Twilio should clarify how callers reach the EF-backed model, not displace EF Core instruction.
 
 ## Scope
 
 - Modify `PhoneBook/phonebook_tutorial.md` only during implementation.
-- Use `PhoneBook/` and `PhoneBook.Tests/` as the source of truth, with `.gitignore`, `README.md`, `main-menu.jpg`, and `contacts-table.jpg` documented as repository assets.
-- Name every non-build project file once: application code, solution/project files, tests, migrations, generated migration metadata, configuration, and repository assets.
-- Explain runtime-created or ignored artifacts separately: `config.json`, `PhoneBook.db`, `.vs`, `bin`, and `obj`.
-- Preserve credential safety: configuration examples must be placeholders and no credentials, private phone numbers, or real provider claims may appear.
-- Do not change runtime code, dependencies, tests, database contents, screenshots, or ignore rules as part of the tutorial rewrite.
-- Keep non-EF subjects proportional: describe them accurately and connect them to the data flow, but do not let provider-specific SMTP or Twilio details displace EF Core teaching.
+- Treat `PhoneBook/`, `PhoneBook.Tests/`, `.gitignore`, `README.md`, `main-menu.jpg`, and `contacts-table.jpg` as the source of truth.
+- Name every non-build application, test, migration, project, solution, and repository asset file once. Explain generated migration metadata after naming each generated file.
+- Explain `config.json`, `PhoneBook.db`, `.vs`, `bin`, and `obj` as runtime/generated artifacts.
+- Keep credentials and phone numbers as placeholders. Do not promise email or SMS delivery.
+- Do not modify runtime code, dependencies, tests, screenshots, database files, or ignore rules.
 
-## Tutorial structure
+## Step-by-step tutorial structure
 
-1. **Overview and EF learning map** — current capabilities, the EF Core concepts the reader will learn, and a recommended reading order.
-2. **Run, build, test, and working directory** — explicit Windows-compatible commands for the app, solution, and tests. Explain that `PhoneBook.db` and `config.json` are resolved from the process working directory.
-3. **EF Core mental model** — define ORM, entity, model, `DbContext`, `DbSet`, and SQLite before introducing the project's files. Explain the division between C# objects in memory and rows in a database.
-4. **Architecture and startup** — a compact component diagram, then trace `Program.cs`: `Database.Migrate()`, manual service/UI construction, and `Run()`. Explain why migration runs before any user action and why this small project uses manual composition instead of a dependency-injection container.
-5. **Model the database** — deeply explain `Contact.cs`, `Category.cs`, and `PhoneBookContext.cs`: conventions, annotations, `OnConfiguring`, the SQLite connection string, `DbSet` properties, seed data, nullable foreign keys, navigation properties, the unique category-name index, and the entity relationship diagram.
-6. **EF Core query and tracking lifecycle** — make this the central chapter. Compare `GetAllContacts`/`GetAllCategories` (`Include`, `AsNoTracking`, ordering) with `UpdateContact`/`UpdateCategory` (`Find`, tracked entity, copying changed values, `SaveChanges`). Explain why a fresh context is created and disposed per service operation, and how the optional `Func<PhoneBookContext>` enables tests.
-7. **Contact vertical slice** — trace view, add, update, delete, and search from a menu choice to EF Core. Make `Run -> AddContact -> Validation -> ContactService.AddContact -> DbSet.Add -> SaveChanges` the worked example; identify which validation is UI-only and which behavior EF enforces.
-8. **Category relationship vertical slice** — explain optional assignment, `Include(category => category.Contacts)`, contact counts, normalization, case-insensitive duplicate prevention, the database unique index, and setting every related `CategoryId` to `null` before deletion.
-9. **Schema evolution with migrations** — use a Mermaid timeline for `InitialCreate`, `AddCategories`, and `AddUniqueCategoryName`; explain `Up`/`Down`, authored migration operations, Designer files, and the model snapshot. State which files are generated and must not be hand-edited.
-10. **Testing EF behavior and its limits** — explain xUnit, `TestDbContextFactory`, the shared GUID-named EF InMemory store, each test class, and why InMemory tests do not prove SQLite-specific behavior, migrations, or database constraints.
-11. **UI, configuration, and communication as consumers** — concisely show how `UserInterface`, `Validation`, configuration classes, `EmailService`, `SmsService`, and `OperationResult` sit around the EF core. Explain first-use configuration, secrets, and E.164 only as needed to understand their interaction with contacts.
-12. **Complete file reference** — grouped, scannable file cards/tables. Every item receives `What`, `Why`, `How/Connects to`; generated files are grouped only where their shared role makes an individual deep dive redundant.
-13. **EF-focused troubleshooting and next reading** — SDK, context/database path, migrations, stale schema, tracking surprises, configuration, SMTP, and Twilio problems, plus a suggested source-reading order.
+### Step 0 — Create the shell
+
+Introduce `PhoneBook.slnx` and `PhoneBook.csproj`: the solution, .NET 10 executable, nullable reference types, and EF Core/SQLite packages. Show restore/run/build/test commands and explain the working-directory location of `PhoneBook.db` and `config.json`.
+
+### Step 1 — Create the first entity
+
+Introduce `Models/Contact.cs`. Explain an entity, primary key convention, `[Required]`, `[MaxLength]`, optional email, and nullable `CategoryId` as a placeholder for a relationship introduced later. Distinguish EF model metadata from interactive validation.
+
+### Step 2 — Add the context and first schema
+
+Introduce `Data/PhoneBookContext.cs` with `DbSet<Contact>`, `UseSqlite("Data Source=PhoneBook.db")`, seed contacts, and the first model. Then introduce `Migrations/20260709081750_InitialCreate.cs` and its Designer file as the initial schema transition. Define `DbContext`, `DbSet`, connection string, seed data, migration, `Up`, and `Down`.
+
+### Step 3 — Query and save contacts
+
+Introduce the contact-focused portions of `Services/ContactService.cs`. Build from `GetAllContacts` to add, update, delete, and search. Teach LINQ, `Include`, `AsNoTracking`, `Find`, `Add`, `Remove`, `EF.Functions.Like`, change tracking, and `SaveChanges`. Explain the optional `Func<PhoneBookContext>` factory and `using var` when it first appears.
+
+### Step 4 — Give the first EF flow a user interface
+
+Introduce `Helpers/Validation.cs` and the contact-focused parts of `UI/UserInterface.cs`, then `Program.cs` as the composition root that calls `Database.Migrate()` and begins `Run()`. Trace one complete Add Contact path from prompt validation through `DbSet.Add` and `SaveChanges`. Explain that direct service callers can bypass UI validation.
+
+### Step 5 — Test the first data layer
+
+Introduce `PhoneBook.Tests/PhoneBook.Tests.csproj`, `Helpers/TestDbContextFactory.cs`, and `ContactServiceTests.cs`. Explain a derived context, the EF InMemory provider, GUID-named shared stores, and the context-factory test seam. State what the tests prove and why they do not prove SQLite behavior.
+
+### Step 6 — Extend the model with categories
+
+Introduce `Models/Category.cs`, the category-related changes in `Contact.cs` and `PhoneBookContext.cs`, `Services/CategoryService.cs`, and the category UI. Teach nullable foreign keys, navigation properties, `Include(category => category.Contacts)`, category assignment, and contact counts. Immediately follow those changes with `Migrations/20260709171645_AddCategories.cs` and its Designer file.
+
+### Step 7 — Enforce category uniqueness and test relationships
+
+Introduce `Migrations/20260710000000_AddUniqueCategoryName.cs`, the unique `Categories.Name` index, normalized case-insensitive service checks, and `CategoryServiceTests.cs`. Explain the difference between application-level duplicate messaging and database-level constraints. Trace category deletion setting each related `CategoryId` to `null` before saving/removing the category.
+
+### Step 8 — Add supporting features around the data layer
+
+Introduce `Configuration/AppConfig.cs`, `Configuration/ConfigManager.cs`, `Services/EmailService.cs`, `Services/SmsService.cs`, `Services/OperationResult.cs`, `CommunicationServiceTests.cs`, and the remaining UI paths. Explain configuration/secrets, E.164 versus general contact phone validation, `sealed`, `record`, and provider failure results. Keep the focus on how the features select or use persisted contacts.
+
+### Step 9 — Verify, evolve, and navigate the finished project
+
+Introduce `ValidationTests.cs`, `MigrationTests.cs`, `PhoneBookContextModelSnapshot.cs`, future migration commands, troubleshooting, source-reading order, screenshots, `README.md`, `.gitignore`, and the complete file reference. Explain generated metadata, test limits, runtime artifacts, and next EF Core experiments.
 
 ## Diagrams
 
-Use compact Mermaid diagrams that earn their space:
+Use five compact Mermaid diagrams, introduced at the step where each answers a new question:
 
-1. **Architecture flowchart** — `Program.cs` -> services and UI; UI -> validation/configuration; CRUD services -> `PhoneBookContext` -> SQLite; communication services -> SMTP/Twilio.
-2. **EF entity lifecycle sequence** — add-contact path through prompt validation, optional category lookup, entity creation, `DbSet.Add`, change tracking, and `SaveChanges`.
-3. **Query versus update flow** — a compact comparison of `Include` + `AsNoTracking` reads and `Find` + tracked-entity updates.
-4. **Entity relationship diagram** — one optional `Category` to many `Contact` rows through nullable `CategoryId`.
-5. **Migration timeline** — the ordered three migrations and the schema change made by each.
-
-Keep labels short, avoid duplicating prose inside diagrams, and introduce each diagram with the question it answers.
-
-## File-reference rules
-
-- Explain `PhoneBook.slnx`, `PhoneBook.csproj`, and `PhoneBook.Tests.csproj`; the solution must not be omitted.
-- Cover `Program.cs`, UI, models, context, validation, configuration classes, each service, and `OperationResult` individually.
-- Give `Contact.cs`, `Category.cs`, `PhoneBookContext.cs`, `ContactService.cs`, and `CategoryService.cs` the deepest explanations. Their cards must connect code directly to EF Core concepts and to the relevant diagram/vertical slice.
-- Cover all three authored migration files individually. Explain both Designer files and `PhoneBookContextModelSnapshot.cs` as generated EF Core metadata; note that the third migration uses explicit attributes and has no corresponding Designer file in this repository.
-- Cover the test database factory and every test class, accurately describing their current assertions rather than calling the suite "full CRUD" coverage.
-- Explain `.gitignore`, `README.md`, screenshots, and ignored/runtime artifacts. Do not describe Git internals or unrelated workspace folders.
+1. **Dependency roadmap** at Step 0: Steps 0–9 and their major outputs.
+2. **Initial entity relationship** at Step 2, then update it at Step 6 to include the optional category relationship without duplicating the full diagram.
+3. **Read versus update flow** at Step 3: `Include`/`AsNoTracking` versus `Find`/tracked entity/`SaveChanges`.
+4. **Add Contact sequence** at Step 4: prompt -> validation -> service -> context -> SQLite.
+5. **Migration timeline** at Step 9: InitialCreate -> AddCategories -> AddUniqueCategoryName.
 
 ## Accuracy requirements
 
-- Describe contact search as SQL `LIKE` substring matching, not fuzzy matching.
-- State that menu validation protects interactive entry, but direct callers of `ContactService` can bypass it.
-- State that data annotations shape EF Core model metadata; they are not automatically executed as all UI validation during `SaveChanges`.
-- Explain that read methods use `Include` and `AsNoTracking`, while update methods load a tracked entity by ID and copy values into it.
-- Explain that `DbSet.Add` marks a new entity for insertion and `SaveChanges` turns tracked additions, modifications, and deletions into database commands.
-- Explain that `OnConfiguring` selects SQLite and that the context is the unit through which EF Core knows the model, connection, and tracked changes.
-- Explain that CRUD services create/dispose a context per operation and use an optional `Func<PhoneBookContext>` only to support tests.
-- Explain `OperationResult` precisely: it carries success/failure and a message; the UI prints its own success text and displays the returned message on failure.
-- Do not promise email or SMS delivery. Correct settings only allow a provider request.
+- Describe search as SQL `LIKE` substring matching.
+- Explain that `DbSet.Add` marks a new entity for insertion and `SaveChanges` converts tracked additions, modifications, and deletions into database commands.
+- Explain that `OnConfiguring` selects SQLite and that a context is the unit through which EF Core knows the model, connection, and tracked changes.
+- Explain `Include` and `AsNoTracking` for reads; explain `Find` and copied values for updates.
+- State that category service code supplies the case-insensitive duplicate policy while the database has a unique name index.
+- State that the Designer files and model snapshot are generated EF Core metadata and should not be hand-edited.
+- State that configuration is local and ignored because it can contain plaintext secrets.
+- State that InMemory tests do not prove SQLite query translation, index, or migration behavior.
 
 ## Verification
 
-- Compare the complete file reference against `rg --files --hidden` with build and Git directories excluded.
-- Confirm every diagram has valid Mermaid fences and a short explanatory lead-in.
-- Confirm each first-use keyword appears with a short plain-language explanation.
-- Check headings, links, tables, code fences, screenshot paths, and commands in a Markdown renderer.
-- Search for stale claims such as `fuzzy`, `full CRUD`, `Latest`, `TODO`, `TBD`, and `file://`.
-- Run `dotnet test PhoneBook.Tests/PhoneBook.Tests.csproj` without modifying source code.
+- Confirm the tutorial has Step 0 through Step 9 in order and each contains all seven teaching fields.
+- Confirm every source/test/migration/project/asset file is named once in its introduction step or final reference.
+- Confirm each first-use C# and EF Core term has a plain-language definition.
+- Confirm exactly five Mermaid fences, valid repository-relative links, readable tables, and copyable commands.
+- Search for `file://`, `TODO`, `TBD`, `Latest`, stale runtime-first heading names, and claims of historical creation order.
+- Run `dotnet test PhoneBook.Tests/PhoneBook.Tests.csproj` without source-code changes.
