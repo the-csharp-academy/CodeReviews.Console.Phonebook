@@ -6,10 +6,18 @@ Rewrite `PhoneBook/phonebook_tutorial.md` as an EF Core-centered construction gu
 
 This is a **logical dependency order**, not a claim about the repository's historical commit order. The current repository state cannot reliably prove when every source file was first created.
 
+## Language
+
+- Write all explanatory prose, headings, table labels, diagram labels, checkpoints, and troubleshooting guidance in Vietnamese.
+- Preserve source-code text, file paths, package names, shell commands, class names, method names, property names, migration IDs, and JSON property names exactly as they appear in the repository.
+- At first use, write a Vietnamese explanation followed by the English technical term in parentheses—for example, "ngữ cảnh cơ sở dữ liệu (`DbContext`)" and "theo dõi thay đổi (change tracking)". Later uses may use the C# or EF Core identifier directly.
+- Do not create parallel English and Vietnamese paragraphs. A single Vietnamese narrative with English identifiers is the readable source of truth.
+
 ## Audience and teaching style
 
 - Assume basic C#: classes, methods, variables, and `if` statements.
 - Explain unfamiliar C# syntax at first use: `partial`, `sealed`, `record`, nullable `?`, attributes, `Func<T>`, lambda expressions, LINQ, and `using var`.
+- Use Vietnamese phrasing that explains the concept before the English identifier. Avoid literal translation where a short plain-language explanation is clearer.
 - Make EF Core the main thread. Define ORM, entity, model, `DbContext`, `DbSet`, connection string, query, `Include`, `AsNoTracking`, change tracking, `SaveChanges`, migration, model snapshot, seed data, foreign key, and navigation property before using them as shorthand.
 - Every numbered step contains: **Goal**, **Files introduced or changed**, **Why now**, **What to add or understand**, **EF Core lesson**, **Connection to the next step**, and a short verification checkpoint.
 - Use the final checked-in files as cumulative snapshots. A step may point to a class or method that now contains later features, but must identify the subsection relevant to that step rather than pretending the final file existed unchanged at the time.
@@ -92,6 +100,7 @@ Use five compact Mermaid diagrams, introduced at the step where each answers a n
 - Confirm the tutorial has Step 0 through Step 9 in order and each contains all seven teaching fields.
 - Confirm every source/test/migration/project/asset file is named once in its introduction step or final reference.
 - Confirm each first-use C# and EF Core term has a plain-language definition.
+- Confirm prose headings and explanations are Vietnamese while source identifiers and commands remain unchanged.
 - Confirm exactly five Mermaid fences, valid repository-relative links, readable tables, and copyable commands.
 - Search for `file://`, `TODO`, `TBD`, `Latest`, stale runtime-first heading names, and claims of historical creation order.
 - Run `dotnet test PhoneBook.Tests/PhoneBook.Tests.csproj` without source-code changes.
