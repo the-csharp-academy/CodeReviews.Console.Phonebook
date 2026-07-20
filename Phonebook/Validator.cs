@@ -1,11 +1,11 @@
-﻿using System;
+using System;
 using System.Text.RegularExpressions;
 
 namespace Phonebook
 {
     public static class Validator
     {
-        internal static bool IsValidNumber(string? phoneNumber)
+        public static bool IsValidNumber(string? phoneNumber)
         {
             if (string.IsNullOrEmpty(phoneNumber))
                 return false;
@@ -15,7 +15,7 @@ namespace Phonebook
             return Regex.IsMatch(phoneNumber, phoneRegex);
         }
 
-        internal static bool IsValidEmail(string? email)
+        public static bool IsValidEmail(string? email)
         {
             if (string.IsNullOrEmpty(email))
                 return false;
@@ -25,7 +25,7 @@ namespace Phonebook
             return Regex.IsMatch(email, emailRegex);
         }
 
-        internal static bool IsValidChoice(string? strInput, int num)
+        public static bool IsValidChoice(string? strInput, int num)
         {
             if (String.IsNullOrEmpty(strInput))
                 return false;
@@ -37,7 +37,7 @@ namespace Phonebook
             return 0 <= choice && choice <= num;
         }
 
-        internal static bool IsValidString(string? stringInput)
+        public static bool IsValidString(string? stringInput)
         {
             if (String.IsNullOrEmpty(stringInput))
                 return false;

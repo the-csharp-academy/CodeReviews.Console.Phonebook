@@ -6,9 +6,16 @@ namespace Phonebook
     public class UserInput
     {
         private readonly ContactService _contactService;
+        private readonly EmailService _emailService;
+        private readonly SmsService _smsService;
+        private SmtpConfig? _cachedSmtpConfig;
+        private SmsConfig? _cachedSmsConfig;
+
         public UserInput(ContactService contactService)
         {
             _contactService = contactService;
+            _emailService = new EmailService();
+            _smsService = new SmsService();
             GetMenuInput();
         }
 
@@ -220,10 +227,13 @@ namespace Phonebook
             choices.Add("Exit.");
             choices.Add("Edit contact information.");
             choices.Add("Delete this contact.");
+            choices.Add("Send e-mail message to this contact.");
+            choices.Add("Add/Edit e-mail address.");
+            choices.Add("Send SMS message to this contact.");
             TableVisualizer.ShowChoices(choices, "ACTION");
 
             string? inp = Console.ReadLine();
-            while (!Validator.IsValidChoice(inp, 2))
+            while (!Validator.IsValidChoice(inp, 5))
             {
                 Console.Write("\nPlease enter a valid number!\n> ");
                 inp = Console.ReadLine();
@@ -244,11 +254,212 @@ namespace Phonebook
                     Console.WriteLine("\nPress any key to go back to the menu.");
                     Console.ReadKey();
                     return;
+                case (3):
+                    SendEmailInput(contact);
+                    Console.WriteLine("\nPress any key to go back to the menu.");
+                    Console.ReadKey();
+                    return;
+                case (4):
+                    AddOrUpdateEmailInput(contact);
+                    Console.WriteLine("\nPress any key to go back to the menu.");
+                    Console.ReadKey();
+                    return;
+                case (5):
+                    SendSmsInput(contact);
+                    Console.WriteLine("\nPress any key to go back to the menu.");
+                    Console.ReadKey();
+                    return;
                 default:
                     Console.WriteLine("\nPress any key to go back to the menu.");
                     Console.ReadKey();
                     return;
             }
+        }
+
+        private void SendSmsInput(Contact contact)
+        {
+            if (string.IsNullOrWhiteSpace(contact.PhoneNumber) || !Validator.IsValidNumber(contact.PhoneNumber))
+            {
+                Console.WriteLine("\nThis contact does not have a valid phone number for SMS.");
+                return;
+            }
+
+            Console.WriteLine($"\nSEND SMS TO {contact.Name} ({contact.PhoneNumber})");
+
+            Console.Write("\nEnter SMS message body:\n> ");
+            string? message = Console.ReadLine()?.Trim() ?? "";
+
+            if (string.IsNullOrWhiteSpace(message))
+            {
+                Console.WriteLine("\nSMS message body cannot be empty.");
+                return;
+            }
+
+            SmsConfig config = GetSmsConfigPrompt();
+
+            Console.WriteLine("\nSending SMS...");
+            _smsService.SendSms(contact.PhoneNumber, message, config);
+        }
+
+        private SmsConfig GetSmsConfigPrompt()
+        {
+            if (_cachedSmsConfig != null)
+            {
+                string modeStr = _cachedSmsConfig.IsSimulation ? "Simulation Mode" : $"API Mode via {_cachedSmsConfig.FromPhoneNumber}";
+                Console.Write($"\nUse previous SMS settings ({modeStr})? (y/n):\n> ");
+                string? ans = Console.ReadLine()?.Trim().ToLower();
+                if (ans == "y" || ans == "yes")
+                {
+                    return _cachedSmsConfig;
+                }
+            }
+
+            var config = new SmsConfig();
+            Console.WriteLine("\nSMS CONFIGURATION");
+            Console.Write("Run in Simulation Mode? (y/n, default: y):\n> ");
+            string? simAns = Console.ReadLine()?.Trim().ToLower();
+
+            if (simAns == "n" || simAns == "no")
+            {
+                config.IsSimulation = false;
+                Console.Write("Enter Account SID:\n> ");
+                config.AccountSid = Console.ReadLine()?.Trim() ?? "";
+
+                Console.Write("Enter Auth Token:\n> ");
+                config.AuthToken = Console.ReadLine()?.Trim() ?? "";
+
+                Console.Write("Enter From Phone Number (e.g. +12123456789):\n> ");
+                config.FromPhoneNumber = Console.ReadLine()?.Trim() ?? "";
+            }
+            else
+            {
+                config.IsSimulation = true;
+            }
+
+            _cachedSmsConfig = config;
+            return config;
+        }
+
+        private void SendEmailInput(Contact contact)
+        {
+            if (string.IsNullOrWhiteSpace(contact.Email))
+            {
+                Console.WriteLine("\nThis contact does not have an e-mail address.");
+                Console.Write("Would you like to add an e-mail address now? (y/n):\n> ");
+                string? ans = Console.ReadLine()?.Trim().ToLower();
+                if (ans == "y" || ans == "yes")
+                {
+                    bool updated = AddOrUpdateEmailInput(contact);
+                    if (!updated || string.IsNullOrWhiteSpace(contact.Email))
+                    {
+                        Console.WriteLine("\nCannot send email without a valid recipient email address.");
+                        return;
+                    }
+                }
+                else
+                {
+                    return;
+                }
+            }
+
+            Console.WriteLine($"\nSEND E-MAIL TO {contact.Name} ({contact.Email})");
+
+            Console.Write("\nEnter email subject:\n> ");
+            string? subject = Console.ReadLine()?.Trim() ?? "";
+
+            Console.Write("\nEnter email message body:\n> ");
+            string? body = Console.ReadLine()?.Trim() ?? "";
+
+            SmtpConfig config = GetSmtpConfigPrompt();
+
+            Console.WriteLine("\nSending email...");
+            _emailService.SendEmail(contact.Email!, subject, body, config);
+        }
+
+        private bool AddOrUpdateEmailInput(Contact contact)
+        {
+            Console.WriteLine($"\nADD / EDIT E-MAIL FOR {contact.Name}");
+            Console.Write("Enter email address (or 0 to exit):\n> ");
+            string? inpEmail = Console.ReadLine()?.Trim();
+
+            if (inpEmail == "0")
+                return false;
+
+            while (!Validator.IsValidEmail(inpEmail))
+            {
+                Console.WriteLine("\nPlease enter a valid email address (e.g., name@example.com) or 0 to exit.");
+                Console.Write("> ");
+                inpEmail = Console.ReadLine()?.Trim();
+                if (inpEmail == "0")
+                    return false;
+            }
+
+            bool success = _contactService.UpdateContactEmail(contact.Id, inpEmail!);
+            if (success)
+            {
+                contact.Email = inpEmail;
+                Console.WriteLine($"\nE-mail address updated to '{inpEmail}' successfully!");
+                return true;
+            }
+            else
+            {
+                Console.WriteLine("\nFailed to update e-mail address.");
+                return false;
+            }
+        }
+
+        private SmtpConfig GetSmtpConfigPrompt()
+        {
+            if (_cachedSmtpConfig != null)
+            {
+                Console.Write($"\nUse previous SMTP settings ({_cachedSmtpConfig.SenderEmail} via {_cachedSmtpConfig.Host})? (y/n):\n> ");
+                string? ans = Console.ReadLine()?.Trim().ToLower();
+                if (ans == "y" || ans == "yes")
+                {
+                    return _cachedSmtpConfig;
+                }
+            }
+
+            var config = new SmtpConfig();
+            Console.WriteLine("\nSMTP CONFIGURATION");
+
+            Console.Write("Enter SMTP Host (default: smtp.gmail.com):\n> ");
+            string? host = Console.ReadLine()?.Trim();
+            if (!string.IsNullOrEmpty(host))
+            {
+                config.Host = host;
+            }
+
+            Console.Write("Enter SMTP Port (default: 587):\n> ");
+            string? portStr = Console.ReadLine()?.Trim();
+            if (int.TryParse(portStr, out int port))
+            {
+                config.Port = port;
+            }
+
+            Console.Write("Enter Sender Email:\n> ");
+            string? senderEmail = Console.ReadLine()?.Trim();
+            while (!Validator.IsValidEmail(senderEmail))
+            {
+                Console.WriteLine("Please enter a valid sender email address (e.g. yourname@gmail.com):");
+                Console.Write("> ");
+                senderEmail = Console.ReadLine()?.Trim();
+            }
+            config.SenderEmail = senderEmail!;
+
+            Console.Write("Enter Sender Password / App Password:\n> ");
+            string? password = Console.ReadLine() ?? "";
+            config.Password = password;
+
+            Console.Write("Enable SSL/TLS? (y/n, default: y):\n> ");
+            string? sslAns = Console.ReadLine()?.Trim().ToLower();
+            if (sslAns == "n" || sslAns == "no")
+            {
+                config.EnableSsl = false;
+            }
+
+            _cachedSmtpConfig = config;
+            return config;
         }
 
         private void AddContactInput()

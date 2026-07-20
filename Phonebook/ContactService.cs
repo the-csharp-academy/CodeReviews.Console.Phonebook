@@ -198,6 +198,42 @@ namespace Phonebook
             }
         }
 
+        public bool UpdateContactEmail(int id, string email)
+        {
+            try
+            {
+                var contact = _context.Contacts.FirstOrDefault(c => c.Id == id);
+
+                if (contact != null)
+                {
+                    contact.Email = email;
+                    _context.SaveChanges();
+                    return true;
+                }
+
+                else
+                {
+                    Console.WriteLine("\nContact not found!");
+                    return false;
+                }
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                Console.WriteLine($"\nConcurrency error: {ex.Message}");
+                return false;
+            }
+            catch (DbUpdateException ex)
+            {
+                Console.WriteLine($"\nDatabase update error: {ex.InnerException?.Message ?? ex.Message}");
+                return false;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"\nUnexpected database error: {ex.Message}");
+                return false;
+            }
+        }
+
         public List<string> GetCategories()
         {
             try
