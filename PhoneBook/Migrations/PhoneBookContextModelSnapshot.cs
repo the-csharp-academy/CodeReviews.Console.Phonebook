@@ -60,6 +60,38 @@ namespace PhoneBook.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("Contacts");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "John",
+                            JobTitle = "Software Engineer",
+                            LastName = "Doe",
+                            Notes = "College friend",
+                            OrganizationName = "Microsoft"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            CreatedAt = new DateTime(2026, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "Jane",
+                            JobTitle = "Product Manager",
+                            LastName = "Smith",
+                            Notes = "Met at conference",
+                            OrganizationName = "Google"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            CreatedAt = new DateTime(2026, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            FirstName = "David",
+                            JobTitle = "Cloud Architect",
+                            LastName = "Wilson",
+                            Notes = "Work contact",
+                            OrganizationName = "Amazon"
+                        });
                 });
 
             modelBuilder.Entity("PhoneBook.Models.EmailDetail", b =>
@@ -92,6 +124,32 @@ namespace PhoneBook.Migrations
                     b.HasIndex("ContactId");
 
                     b.ToTable("Emails");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ContactId = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmailAddress = "john.doe@example.com",
+                            Label = 2
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ContactId = 2,
+                            CreatedAt = new DateTime(2026, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmailAddress = "jane.smith@example.com",
+                            Label = 2
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ContactId = 3,
+                            CreatedAt = new DateTime(2026, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            EmailAddress = "david.wilson@example.com",
+                            Label = 1
+                        });
                 });
 
             modelBuilder.Entity("PhoneBook.Models.PhoneNumberDetail", b =>
@@ -124,6 +182,32 @@ namespace PhoneBook.Migrations
                     b.HasIndex("ContactId");
 
                     b.ToTable("PhoneNumbers");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            ContactId = 1,
+                            CreatedAt = new DateTime(2026, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Label = 0,
+                            Number = "9876543210"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            ContactId = 2,
+                            CreatedAt = new DateTime(2026, 1, 2, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Label = 2,
+                            Number = "9123456789"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            ContactId = 3,
+                            CreatedAt = new DateTime(2026, 1, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
+                            Label = 0,
+                            Number = "9988776655"
+                        });
                 });
 
             modelBuilder.Entity("PhoneBook.Models.EmailDetail", b =>
