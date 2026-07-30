@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "PhoneBook.EntityFramework": {
+      "commandName": "Project",
+      "workingDirectory": "C:\\Users\\j_men\\source\\repos\\PhoneBook.EntityFramework\\PhoneBook.EntityFramework\\"
+    }
+  }
+}
