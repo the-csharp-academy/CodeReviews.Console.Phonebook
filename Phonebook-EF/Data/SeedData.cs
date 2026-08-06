@@ -4,11 +4,9 @@ namespace Phonebook_EF;
 
 public static class SeedData
 {
-    public static void Initialize(PhonebookContext context)
+    public static void Initialize(DbContext context)
     {
-        context.Database.EnsureCreated();
-
-        if (context.Contacts.Any())
+        if (context.Set<Contact>().Any())
         {
             return;
         }
@@ -38,7 +36,7 @@ public static class SeedData
             }
         };
 
-        context.Contacts.AddRange(contacts);
+        context.Set<Contact>().AddRange(contacts);
         context.SaveChanges();
     }
 }
