@@ -23,6 +23,5 @@ public sealed class PhonebookContext : DbContext
         using var context = new PhonebookContext();
         Console.WriteLine($"Database path: {context.dbPath}");
         context.Database.Migrate();
-        SeedData.Initialize(context);
     }
 }
